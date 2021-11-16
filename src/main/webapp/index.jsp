@@ -13,5 +13,7 @@
 <a href="Quantity.html">Quantity</a>
 <br>
 <a href="ServletList?quantity=1">Lista</a>
+<br>
+<a href="DataBase.html">CRUD</a>
 </body>
 </html>
