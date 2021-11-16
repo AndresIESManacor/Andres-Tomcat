@@ -1,14 +1,18 @@
 package com.example.andrestomcat;
 
+import com.example.andrestomcat.AnteriorProject.AccesoDatos.CRUDProduct;
+import com.example.andrestomcat.AnteriorProject.Product;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 @WebServlet(name = "ServletList", value = "/ServletList")
 public class ServletList extends HttpServlet {
-    CRUD crud = new CRUD();
+    CRUDProduct crud = new CRUDProduct();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int quantity = 0;
@@ -30,10 +34,10 @@ public class ServletList extends HttpServlet {
         out.println("<body>");
         out.print("<p>Quantity Selected: ");
         out.print(" "+quantity+" </p>");
-        String[] products = crud.readAll();
+        List<Product> products = crud.readAll();
         String[] productQuantity = new String[quantity];
         for (int x = 0; x < productQuantity.length; x++) {
-            out.println("<p>" + products[x] + "</p>");
+            out.println("<p>" + products.get(x) + "</p>");
         }
         out.println("</body></html>");
         out.close();
