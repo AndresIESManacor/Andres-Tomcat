@@ -1,12 +1,15 @@
 package com.example.andrestomcat;
 
+import com.example.andrestomcat.AnteriorProject.AccesoDatos.CRUDProduct;
 import com.example.andrestomcat.AnteriorProject.Business;
+import com.example.andrestomcat.AnteriorProject.Product;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Objects;
 
 @WebServlet(name = "ServletDataBase", value = "/ServletDataBase")
 public class ServletDataBase extends HttpServlet {
@@ -17,6 +20,7 @@ public class ServletDataBase extends HttpServlet {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+        CRUDProduct crudProduct = new CRUDProduct();
 
         Business business = new Business();
 
@@ -48,35 +52,28 @@ public class ServletDataBase extends HttpServlet {
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
 
-        // DONT SELECTED AND CLICK ANYTHING
-        if (isNotNull(name) && isNotNull(descript) && isNotNull(price)) {
-            out.println("<html>");
-            out.println("<head><title>A Test Servlet</title></head>");
-            out.println("<body>");
-            out.print("<p style='text-align:center;'>You dont selected anything yet</p>");
-            out.println("</body>");
-        }
-
         //BUTTONS FUNTION
         if (isNotNull(submit)) {
             // send HTML page to client
             out.println("<html>");
             out.println("<head><title>A Test Servlet</title></head>");
             out.println("<body>");
-            out.print("<p>" + name + descript + price + "</p>");
+            assert name != null;
+            if (name.length()!=0 && Objects.requireNonNull(descript).length()!=0 && Objects.requireNonNull(price).length()!=0) {
+                assert price != null;
+                business.insert(new Product(name, descript, Double.parseDouble(price)));
+                out.print("<p>Product added!! " + name + descript + price + "</p>");
+            }
             out.println("</body>");
         }
 
         if (isNotNull(buttonUpdate)) {
-            if (isNotNull(name) && isNotNull(descript) && isNotNull(price)) {
-                out.println("<body>");
-                out.print("<p>" + buttonUpdate + "</p>");
+            out.println("<body>");
+            assert name != null;
+            if (name.length()!=0 && Objects.requireNonNull(descript).length()!=0 && Objects.requireNonNull(price).length()!=0) {
+                business.updateProduct(1, out, new Product(1,name,descript,Double.parseDouble(price)));
             } else {
-                out.println("<html>");
-                out.println("<head><title>A Test Servlet</title></head>");
-                out.println("<body>");
                 out.print("<p style='text-align:center;'>You dont write the product correctly</p>");
-                out.print("<p style='text-align:center;'>"+buttonUpdate+"</p>");
             }
             out.println("</body>");
         }
@@ -98,7 +95,7 @@ public class ServletDataBase extends HttpServlet {
         if (isNotNull(buttondeleteName)) {
             out.println("<body>");
             if (isNotNull(deleteNameProduct)) {
-                business.deleteName(deleteNameProduct, out);
+                business.deleteByID(crudProduct.readByName(deleteNameProduct).getIdPro(), out);
             } else {
                 out.print("<p>Name dont selected</p>");
             }

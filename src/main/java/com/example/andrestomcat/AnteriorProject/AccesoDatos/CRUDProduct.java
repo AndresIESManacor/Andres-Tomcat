@@ -59,7 +59,7 @@ public class CRUDProduct {
         return products;
     }
 
-    public Product readById(int id){
+    public Product readByID(int id){
         Connection connection = null;
 
         try {
@@ -79,7 +79,27 @@ public class CRUDProduct {
         }
         return new Product("Vacio");
     }
-    public void updateById(Product product, int id){
+    public Product readByName(String name){
+        Connection connection = null;
+
+        try {
+            connection = connection();
+
+            if (connection != null) {
+                System.out.println("Conexión a base de datos ... Ok");
+                Statement sta = connection.createStatement();
+                ResultSet result = sta.executeQuery("SELECT * FROM producto where namePro=\""+name+"\"");
+                result.next();
+                Product product = new Product(result.getInt("idPro"), result.getString("namePro"), result.getString("descriptPro"), result.getDouble("pricePro"));
+                connection.close();
+                return product;
+            }
+        } catch(SQLException ex) {
+            System.out.println(ex);
+        }
+        return new Product("Vacio");
+    }
+    public void updateByID(Product product, int id){
         Connection conn = null;
 
         try {
@@ -96,7 +116,7 @@ public class CRUDProduct {
             System.out.println(ex);
         }
     }
-    public void deleteById(int id){
+    public void deleteByID(int id){
         Connection conn = null;
 
         try {
@@ -104,7 +124,7 @@ public class CRUDProduct {
 
             if (conn != null) {
                 System.out.println("Connexion a base de dates ... Ok");
-                String query = "delete from producto where idPro= '"+id+"'";
+                String query = "delete from producto where namePro= '"+id+"'";
                 Statement sta = conn.createStatement();
                 sta.executeUpdate(query);
                 conn.close();
@@ -127,28 +147,5 @@ public class CRUDProduct {
         } catch(SQLException ex) {
             System.out.println(ex);
         }
-    }
-    public String[] getColumnName(){
-        try {
-            Connection conn = connection();
-
-            if (conn != null) {
-                System.out.println("Connexion a base de dates ... Ok");
-                Statement sta = conn.createStatement();
-                ResultSet resultSet = sta.executeQuery("SELECT *FROM "+table);
-                ResultSetMetaData md = (ResultSetMetaData) resultSet.getMetaData();
-                int counter = md.getColumnCount();
-                String colName[] = new String[counter];
-                System.out.println("The column names are as follows:");
-                for (int loop = 1; loop <= counter; loop++) {
-                    colName[loop-1] = md.getColumnLabel(loop);
-                    System.out.println(colName[loop-1]);
-                }
-                conn.close();
-            }
-        } catch(SQLException ex) {
-            System.out.println(ex);
-        }
-        return new String[0];
     }
 }
