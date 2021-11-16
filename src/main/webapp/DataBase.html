@@ -40,12 +40,12 @@
         .DELETE {
             margin-bottom: 50px;
         }
-        input[type=button] {
+        input[type=submit] {
             padding: 10px;
             background-color: white;
             border: lightgrey solid 1px;
         }
-        input[type=button]:hover {
+        input[type=submit]:hover {
             color: darkgray;
             border: darkgray solid 1px;
         }
@@ -68,19 +68,24 @@
                 <a>Select descript: <input type="text" name="descProduct"></a>
                 <a>Select price: <input type="text" name="priceProduct"></a>
             </div>
-            <input type="submit" name="submit"/>
+            <input type="submit" value="submit" name="submit"/>
+            <input type="submit" value="update" name="update">
         </form>
-        <div class="UPDATE">
-            <input type="button" value="UPDATE">
-        </div>
-        <div class="READ">
-            <input type="button" value="Read All">
-            <input type="button" value="Read only ID">
-        </div>
-        <div class="DELETE">
-            <input type="button" value="Delete All Table">
-            <input type="button" value="Delete by ID">
-        </div>
+        <form action="ServletDataBase" method="get" target="my_iframe">
+            <div class="READ">
+                <input type="submit" value="readAll" name="readAll">
+                <a>Select name: <input type="text" name="readNameProduct"></a>
+                <input type="submit" value="readName" name="readName">
+            </div>
+        </form>
+        <form action="ServletDataBase" method="get" target="my_iframe">
+            <div class="DELETE">
+                <input type="submit" value="deleteAllTable" name="deleteAllTable">
+                <br>
+                <a>Select name: <input type="text" name="deleteNameProduct"></a>
+                <input type="submit" value="buttondeleteName" name="buttondeleteName">
+            </div>
+        </form>
     </div>
     <div class="response">
         <iframe name="my_iframe" src="ServletDataBase"></iframe>

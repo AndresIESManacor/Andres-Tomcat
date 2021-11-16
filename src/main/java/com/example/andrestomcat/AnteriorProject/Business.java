@@ -4,6 +4,8 @@ import com.example.andrestomcat.AnteriorProject.AccesoDatos.CRUDProduct;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,28 +13,31 @@ public class Business {
     private final CRUDProduct crudProduct = new CRUDProduct();
     private final Product product = new Product();
 
-    public void listProduct(DefaultTableModel model){
+    public void listProduct(PrintWriter printWriter){
         List<Product> productList = crudProduct.readAll();
+        printWriter.println("<div style='text-align:center'>");
         for (int i = 0; i < productList.size(); i++) {
-            model.addRow(new Object[]{productList.get(i).getIdPro(), productList.get(i).getNamePro(),productList.get(i).getDescriptPro(), productList.get(i).getPricePro()});
+            printWriter.println(Arrays.toString(new Object[]{productList.get(i).getIdPro(), productList.get(i).getNamePro(), productList.get(i).getDescriptPro(), productList.get(i).getPricePro()}));
+            printWriter.println("<br><hr><br>");
         }
+        printWriter.println("</div>");
     }
     public void restartCataleg() {
         crudProduct.deleteAllINFOonTABLE();
     }
-    public void searchProduct(JTextField textField,DefaultTableModel model){
-        int id = 0;
-        try {
-            id = Integer.parseInt(textField.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "The ID selected doesnt exit!!");
-            return;
+    public void searchProduct(String name,PrintWriter printWriter){
+        Product product1 = null;
+        List<Product> productList = crudProduct.readAll();
+        for (int i = 0; i < productList.size(); i++) {
+            if (productList.get(i).getNamePro().equals(name)) {
+                product1 = productList.get(i);
+            }
         }
-        Product product1 = crudProduct.readById(id);
-        if (Objects.equals(product1.getNamePro(), "Vacio") && product1.getIdPro() == 0) {
-            JOptionPane.showMessageDialog(null, "The ID selected doesnt exit!!");
+        if (product1!=null) {
+            printWriter.println("<h1 style='text-align:center'>PRODUCT</h1>");
+            printWriter.println(Arrays.toString(new Object[]{product1.getIdPro(), product1.getNamePro(), product1.getDescriptPro(), product1.getPricePro()}));
         } else {
-            model.addRow(new Object[]{product1.getIdPro(), product1.getNamePro(), product1.getDescriptPro(), product1.getPricePro()});
+            printWriter.println("<p>Product dont finded!!!</p>");
         }
     }
 
@@ -58,14 +63,16 @@ public class Business {
         }
     }
 
-    public void deleteID (JTextField textField){
-        int id = 0;
-        try {
-            id = Integer.parseInt(textField.getText());
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "The ID selected doesnt exit!!");
-            return;
+    public void deleteName (String name, PrintWriter printWriter){
+        Product product1 = new Product();
+        List<Product> productList = crudProduct.readAll();
+        printWriter.println(name);
+        for (int i = 0; i < productList.size(); i++) {
+            if (productList.get(i).getNamePro().equals(name)) {
+                product1 = productList.get(i);
+            }
         }
-        crudProduct.deleteById(id);
+        printWriter.println(product1);
+        crudProduct.deleteById(product1.getIdPro());
     }
 }
