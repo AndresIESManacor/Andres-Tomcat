@@ -28,39 +28,38 @@ public class ServletDataBase extends HttpServlet {
         String descript = null;
         String price = null;
         String submit = null;
+        String idUpdate = null;
         String readNameProduct = null;
-        String deleteNameProduct = null;
+        String deleteidProduct = null;
         String buttonUpdate = null;
         String buttonReadAll = null;
         String buttonreadName = null;
         String buttondeleteAllTable = null;
-        String buttondeleteName = null;
+        String buttondeleteID = null;
         try {
             name = request.getParameter("nameProduct");
             descript = request.getParameter("descProduct");
             price = request.getParameter("priceProduct");
             submit = request.getParameter("submit");
-            deleteNameProduct = request.getParameter("deleteNameProduct");
+            idUpdate = request.getParameter("idUpdate");
             readNameProduct = request.getParameter("readNameProduct");
+            deleteidProduct = request.getParameter("deleteIDProduct");
             buttonUpdate = request.getParameter("update");
             buttonReadAll = request.getParameter("readAll");
             buttonreadName = request.getParameter("readName");
             buttondeleteAllTable = request.getParameter("deleteAllTable");
-            buttondeleteName = request.getParameter("buttondeleteName");
+            buttondeleteID = request.getParameter("buttonDeleteId");
         } catch (Exception ignored) {
         }
         response.setContentType("text/html");
         PrintWriter out = response.getWriter();
-
         //BUTTONS FUNTION
         if (isNotNull(submit)) {
             // send HTML page to client
             out.println("<html>");
             out.println("<head><title>A Test Servlet</title></head>");
             out.println("<body>");
-            assert name != null;
-            if (name.length()!=0 && Objects.requireNonNull(descript).length()!=0 && Objects.requireNonNull(price).length()!=0) {
-                assert price != null;
+            if (Objects.requireNonNull(name).length()!=0 && Objects.requireNonNull(descript).length()!=0 && Objects.requireNonNull(price).length()!=0) {
                 business.insert(new Product(name, descript, Double.parseDouble(price)));
                 out.print("<p>Product added!! " + name + descript + price + "</p>");
             }
@@ -69,11 +68,14 @@ public class ServletDataBase extends HttpServlet {
 
         if (isNotNull(buttonUpdate)) {
             out.println("<body>");
-            assert name != null;
-            if (name.length()!=0 && Objects.requireNonNull(descript).length()!=0 && Objects.requireNonNull(price).length()!=0) {
-                business.updateProduct(1, out, new Product(1,name,descript,Double.parseDouble(price)));
+            if (isNotNull(idUpdate)) {
+                out.print("<p style='text-align:center;'>You dont selected a id on update</p>");
             } else {
-                out.print("<p style='text-align:center;'>You dont write the product correctly</p>");
+                if (Objects.requireNonNull(name).length() != 0 && Objects.requireNonNull(descript).length() != 0 && Objects.requireNonNull(price).length() != 0) {
+                    business.updateProduct(Integer.parseInt(idUpdate), out, new Product(Integer.parseInt(idUpdate), name, descript, Double.parseDouble(price)));
+                } else {
+                    out.print("<p style='text-align:center;'>You dont write the product correctly</p>");
+                }
             }
             out.println("</body>");
         }
@@ -92,13 +94,10 @@ public class ServletDataBase extends HttpServlet {
             }
             out.println("</body>");
         }
-        if (isNotNull(buttondeleteName)) {
+        if (isNotNull(buttondeleteID)) {
             out.println("<body>");
-            if (isNotNull(deleteNameProduct)) {
-                business.deleteByID(crudProduct.readByName(deleteNameProduct).getIdPro(), out);
-            } else {
-                out.print("<p>Name dont selected</p>");
-            }
+            assert deleteidProduct != null;
+            business.deleteByID(Integer.parseInt(deleteidProduct), out);
             out.println("</body>");
         }
         if (isNotNull(buttondeleteAllTable)) {

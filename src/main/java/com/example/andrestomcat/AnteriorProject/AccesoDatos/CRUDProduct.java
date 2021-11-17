@@ -8,10 +8,17 @@ import java.util.List;
 
 public class CRUDProduct {
 
+    // ESCUELA
+    /*
     String login = "andres5";
     String password = "andres12345A_";
     String table = "productos";
-    //URL School
+    */
+    // CASA ANDRES
+    String login = "admins";
+    String password = "andres12345A_";
+    String table = "productos";
+
     String url = "jdbc:mysql://localhost:3306/"+table+"?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC";
 
     public Connection connection() throws SQLException {
@@ -124,7 +131,7 @@ public class CRUDProduct {
 
             if (conn != null) {
                 System.out.println("Connexion a base de dates ... Ok");
-                String query = "delete from producto where namePro= '"+id+"'";
+                String query = "delete from producto where idPro= '"+id+"'";
                 Statement sta = conn.createStatement();
                 sta.executeUpdate(query);
                 conn.close();

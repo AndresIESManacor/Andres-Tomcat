@@ -52,6 +52,7 @@ public class Business {
 
     public void deleteByID (int id, PrintWriter printWriter){
         printWriter.println(crudProduct.readByID(id));
+        printWriter.println(id);
         crudProduct.deleteByID(id);
     }
 }
